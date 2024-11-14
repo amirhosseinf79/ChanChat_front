@@ -18,7 +18,7 @@ export default function DefaultBtn({
   return (
     <button
       onClick={handler ?? undefined}
-      className={`bg-white text-indigo-500 p-2 rounded-md w-20 disabled:bg-slate-100 disabled:text-slate-400 ${className}`}
+      className={`bg-indigo-500 text-indigo-100 p-2 rounded-md disabled:bg-indigo-200 disabled:text-indigo-400 ${className}`}
       disabled={disabled}
     >
       <BtnLoader loading={loading}>{value}</BtnLoader>

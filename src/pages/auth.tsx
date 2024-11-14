@@ -8,9 +8,9 @@ import LoginFormContext, {
 export default function Auth() {
   const [formType, setFormType] = useState<loginFormType>("Login");
   return (
-    <div className="flex flex-col justify-center items-center md:h-screen h-[92vh] p-4">
-      <div>
-        <div className="bg-indigo-500 p-5 rounded-lg w-full flex flex-col">
+    <div className="flex flex-col justify-center items-center md:h-screen h-[92vh]">
+      <div className="md:h-auto md: h-[92vh] flex md:w-auto w-full">
+        <div className="md:bg-indigo-500 bg-transparent md:rounded-lg rounded-none w-full flex flex-col md:h-auto h-[92vh] overflow-hidden">
           <LoginFormContext.Provider value={{ setFormType }}>
             {formType == "Login" ? <LoginForm /> : <RegisterForm />}
           </LoginFormContext.Provider>
