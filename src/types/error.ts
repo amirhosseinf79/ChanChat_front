@@ -1,6 +1,6 @@
 interface errorType {
   status: number;
-  details: unknown;
+  details: any;
 }
 
 export default errorType;

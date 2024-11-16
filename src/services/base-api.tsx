@@ -16,16 +16,17 @@ class Api {
     sessionStorage.setItem("token", token);
   }
 
-  public getOptions(method: methodList, fields: unknown) {
+  public getOptions(method: methodList, fields: unknown, token = true) {
     const headers = new Headers();
-    headers.append("Authentication", `Bearer ${this.getToken()}`);
+    if (token) headers.append("Authorization", `Bearer ${this.getToken()}`);
     headers.append("content-type", "application/json");
 
     const options: RequestInit = {
       method,
       headers,
-      body: JSON.stringify(fields),
     };
+    if (fields) options.body = JSON.stringify(fields);
+
     return options;
   }
 
@@ -50,9 +51,15 @@ class Api {
 }
 
 class ApiService extends Api {
-  public async fetchApi<T>(method: methodList, url: `/${string}`, fields: T) {
-    const options = this.getOptions(method, fields);
-    const res = await fetch(this.getUrl(url), options);
+  public async fetchApi<T>(
+    method: methodList,
+    url: `/${string}`,
+    fields: T | undefined,
+    token: boolean
+  ) {
+    const raw_url = this.getUrl(url);
+    const options = this.getOptions(method, fields, token);
+    const res = await fetch(raw_url, options);
     return await this.validateData(res);
   }
 }
