@@ -41,7 +41,7 @@ const useWebSocket = (id?: number) => {
     }
   };
 
-  return { ws, sendMessage, message };
+  return { ws, sendMessage, message, setMessage };
 };
 
 export default useWebSocket;

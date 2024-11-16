@@ -24,12 +24,12 @@ export default function ChatMessage() {
   useEffect(() => {
     if (message && raw_data) {
       const tmp_data = raw_data.results.filter(
-        (i) => i.id != message.message.id
+        (i) => i.id != message.message!.id
       );
       setChatDetails!(message.updated_chat);
       const tmp_list = tmp_data
-        ? [message.message, ...tmp_data]
-        : [message.message];
+        ? [message.message!, ...tmp_data]
+        : [message.message!];
       setData({ ...raw_data, results: tmp_list });
       setFields({ offset: fields.offset! + 1, limit: fields.limit! + 1 });
     } else {

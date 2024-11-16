@@ -36,7 +36,7 @@ export interface messageTypeT {
 
 export interface wsMessage {
   updated_chat: ChatT;
-  message: messageT;
+  message?: messageT;
 }
 
 export type messageFilterT = {

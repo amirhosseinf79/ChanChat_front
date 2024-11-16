@@ -6,9 +6,10 @@ import AutoDataLoader from "../auto-loader";
 import useWebSocket from "../websocket";
 import useAppBase from "./base";
 import { chatFilterT, ChatListT } from "../../types/chat";
+import { LocalWsContext } from "../contexts/local-ws-ctx";
 
 export default function ChatList() {
-  const { message } = useWebSocket();
+  const { message, setMessage } = useWebSocket();
   const {
     fields,
     handleFetch,
@@ -48,7 +49,11 @@ export default function ChatList() {
       <div>
         <DefaultInput onChange={handleFilter} placeholder="Search chats" />
       </div>
-      {fields.title && <UserList title={fields.title} />}
+      {fields.title && (
+        <LocalWsContext.Provider value={{ setMessage }}>
+          <UserList title={fields.title} />
+        </LocalWsContext.Provider>
+      )}
       {fields.title && (
         <div className="pb-1 border-b text-xl font-bold">Chats:</div>
       )}
