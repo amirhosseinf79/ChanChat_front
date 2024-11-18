@@ -11,8 +11,8 @@ const useWebSocket = (id?: number) => {
     // Initialize the WebSocket connection
     const api = new ApiService();
     const url = id
-      ? `ws://127.0.0.1:8000/ws/chat/${id}/`
-      : `ws://127.0.0.1:8000/ws/chat/`;
+      ? `ws://${api.base_url}/ws/chat/${id}/`
+      : `ws://${api.base_url}/ws/chat/`;
     const websocket = new WebSocket(`${url}?token=${api.getToken()}`);
 
     websocket.onopen = () => {
