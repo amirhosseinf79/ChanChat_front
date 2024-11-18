@@ -67,9 +67,8 @@ export default function MessageTextInput() {
   });
 
   function clearFields() {
-    if (!setFields || !setReplyObj) return;
-    setReplyObj(undefined);
-    setFields(initMessageFields);
+    if (setReplyObj) setReplyObj(undefined);
+    if (setFields) setFields(initMessageFields);
   }
 
   function handleSendMessage() {
