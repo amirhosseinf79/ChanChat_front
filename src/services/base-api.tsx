@@ -2,7 +2,7 @@ import responseType, { methodList } from "../types/response";
 
 class Api {
   public base_url = "api.smart-vip.ir";
-  public api_url = `http://${this.base_url}/api`;
+  public api_url = `https://${this.base_url}/api`;
 
   public getUrl(path: `/${string}`) {
     return this.api_url + path;
