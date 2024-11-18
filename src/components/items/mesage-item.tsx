@@ -69,7 +69,7 @@ function ReplyContainer({
 
   return data ? (
     <div
-      className={`p-1 px-2 rounded-md border-l-4 text-sm break-words ${bgColor}`}
+      className={`p-1 px-2 rounded-md border-l-4 text-sm break-words truncate ${bgColor}`}
     >
       <a href={`#msg_${data.message_id}`}>
         <div className="font-bold">{data.author}</div>
