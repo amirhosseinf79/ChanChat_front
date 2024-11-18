@@ -39,7 +39,9 @@ function HeaderContainer({ data }: { data: messageT }) {
   }
 
   return (
-    <div className={`flex gap-2 ${headerJustify} text-xs text-indigo-100`}>
+    <div
+      className={`flex gap-2 ${headerJustify} break-words text-xs text-indigo-100`}
+    >
       <button onClick={addReply}>Reply</button>
       {userInfo || <button onClick={editMsg}>Edit</button>}
     </div>
@@ -66,7 +68,9 @@ function ReplyContainer({
     : "bg-violet-400 border-violet-900";
 
   return data ? (
-    <div className={`p-1 px-2 rounded-md border-l-4 text-sm ${bgColor}`}>
+    <div
+      className={`p-1 px-2 rounded-md border-l-4 text-sm break-words ${bgColor}`}
+    >
       <a href={`#msg_${data.message_id}`}>
         <div className="font-bold">{data.author}</div>
         <div>{data.preview}</div>
@@ -101,7 +105,7 @@ export default function MsgItem({ data, prevAuthor }: prp) {
         <HeaderContainer data={data} />
         <ReplyContainer data={data.reply} sentByMe={sentByMe(data.author.id)} />
         {data.type == "photo" && <ImageContainer url={data.image} />}
-        <div className="px-1 text-wrap" dir="auto">
+        <div className="px-1 break-words" dir="auto">
           {data.type == "message" ? data.text : data.caption}
         </div>
         <div className="flex flex-row-reverse justify-between gap-4 items-center">
