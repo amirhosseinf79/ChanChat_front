@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import errorType from "../../types/error";
 
 interface prp {
@@ -7,6 +8,7 @@ interface prp {
 }
 
 export default function DataLoader({ children, error, loading }: prp) {
+  const navigate = useNavigate();
   if (loading) {
     return (
       <div className="h-full p-5 flex flex-col items-center justify-center">
@@ -21,7 +23,7 @@ export default function DataLoader({ children, error, loading }: prp) {
           <pre className="text-center font-normal">{error.details}</pre>
         </div>
       );
-    }
+    } else if (error.status == 401) navigate("/auth");
   } else {
     return children;
   }
