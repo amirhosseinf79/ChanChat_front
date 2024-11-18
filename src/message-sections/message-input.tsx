@@ -27,7 +27,7 @@ function PreviewContainer({ author, preview }: previewPrp) {
         <button
           className="px-2 text-red-500 bg-white rounded-full"
           onClick={() => {
-            setFields!(initMessageFields);
+            setFields!({ reply_id: undefined, message_id: undefined });
             setReplyObj!(undefined);
           }}
         >
