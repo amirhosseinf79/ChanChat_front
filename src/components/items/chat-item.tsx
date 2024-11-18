@@ -10,12 +10,13 @@ interface prp {
 
 export default function ChatItem({ data }: prp) {
   const { setChatDetails } = useContext(AppContext);
+
   return (
     <div
       className="flex gap-2 dark:bg-indigo-800 dark:text-white text-black bg-indigo-200 p-3 cursor-pointer"
       onClick={() => setChatDetails!(data)}
     >
-      <ProfilePhoto is_online={data.is_online} />
+      <ProfilePhoto is_online={data.is_online} size="lg" />
       <div className="flex flex-col w-full gap-1">
         <div className="flex justify-between gap-4">
           <div>{data.title}</div>

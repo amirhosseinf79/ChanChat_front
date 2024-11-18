@@ -10,7 +10,8 @@ type t2 = messageFilterT | chatFilterT;
 
 export default function useAppBase<T1 extends t1, T2 extends t2>(
   initFilter: T2,
-  appUrl: `/${string}`
+  appUrl: `/${string}`,
+  notFoundMsg: string
 ) {
   const [canFetch, setFetch] = useState(true);
   const [raw_data, setData] = useState<T1>();
@@ -66,7 +67,7 @@ export default function useAppBase<T1 extends t1, T2 extends t2>(
     if (data && data.data.total == 0) {
       const err: errorType = {
         status: 404,
-        details: "No chat found!",
+        details: notFoundMsg,
       };
       setError(err);
     }
@@ -82,5 +83,6 @@ export default function useAppBase<T1 extends t1, T2 extends t2>(
     hasNext,
     fields,
     setFields,
+    setFetch,
   };
 }

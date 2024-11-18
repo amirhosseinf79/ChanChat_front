@@ -8,8 +8,10 @@ export default function MainApp() {
   const [chatDetails, setChatDetails] = useState<ChatT>();
   return (
     <AppContext.Provider value={{ chatDetails, setChatDetails }}>
-      <ChatList />
-      {chatDetails && <ChatMessage />}
+      <div className="flex flex-col md:h-[88vh] h-[92vh]">
+        <ChatList />
+        {chatDetails && <ChatMessage />}
+      </div>
     </AppContext.Provider>
   );
 }

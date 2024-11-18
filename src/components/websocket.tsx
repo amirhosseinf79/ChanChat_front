@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { messageT, wsMessage } from "../types/message";
+import { wsMessage, wsMessageInput } from "../types/message";
 import ApiService from "../services/base-api";
 
 const useWebSocket = (id?: number) => {
@@ -13,6 +13,10 @@ const useWebSocket = (id?: number) => {
       ? `ws://127.0.0.1:8000/ws/chat/${id}/`
       : `ws://127.0.0.1:8000/ws/chat/`;
     const websocket = new WebSocket(`${url}?token=${api.getToken()}`);
+
+    websocket.onopen = () => {
+      console.log("Websocket connected!");
+    };
 
     // Handle incoming messages
     websocket.onmessage = (event) => {
@@ -33,9 +37,11 @@ const useWebSocket = (id?: number) => {
   }, []);
 
   // Function to send a message
-  const sendMessage = (message: messageT) => {
+  const sendMessage = (message: wsMessageInput) => {
     if (ws && ws.readyState === WebSocket.OPEN) {
-      ws.send(JSON.stringify(message));
+      const data = JSON.stringify(message);
+      // console.log(data);
+      ws.send(data);
     } else {
       console.log("WebSocket is not open");
     }

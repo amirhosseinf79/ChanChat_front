@@ -45,7 +45,10 @@ export default function AutoDataLoader({
   return (
     <DataLoader loading={loading} error={error}>
       {showCondition && (
-        <div className="w-full flex justify-center" ref={componentRef}>
+        <div
+          className="w-full flex justify-center items-center"
+          ref={componentRef}
+        >
           <TextBtn handler={handleLoader} className="mt-1" value="Load more" />
         </div>
       )}

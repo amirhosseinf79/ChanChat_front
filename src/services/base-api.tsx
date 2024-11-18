@@ -12,8 +12,14 @@ class Api {
     return token;
   }
 
-  public saveToken(token: string) {
-    sessionStorage.setItem("token", token);
+  public getUser() {
+    const user = sessionStorage.getItem("user");
+    return user;
+  }
+
+  public saveToken(data: any) {
+    sessionStorage.setItem("token", data.token);
+    sessionStorage.setItem("user", data.user_id);
   }
 
   public getOptions(method: methodList, fields: unknown, token = true) {

@@ -9,6 +9,21 @@ function isToday(timestamp: string): boolean {
   );
 }
 
+export function getStrDateWithClock(date?: string) {
+  if (!date) return "";
+
+  const date_obj = new Date(date);
+
+  const year = date_obj.getFullYear();
+  const month = String(date_obj.getMonth() + 1).padStart(2, "0");
+  const day = String(date_obj.getDate()).padStart(2, "0");
+  const hour = String(date_obj.getHours()).padStart(2, "0");
+  const minute = String(date_obj.getMinutes()).padStart(2, "0");
+
+  if (isToday(date)) return `${hour}:${minute}`;
+  return `${year}/${month}/${day} | ${hour}:${minute}`;
+}
+
 export default function getStrDate(date?: string) {
   if (!date) return "";
 
@@ -21,5 +36,5 @@ export default function getStrDate(date?: string) {
   const minute = String(date_obj.getMinutes()).padStart(2, "0");
 
   if (isToday(date)) return `${hour}:${minute}`;
-  else return `${year}/${month}/${day}`;
+  return `${year}/${month}/${day}`;
 }

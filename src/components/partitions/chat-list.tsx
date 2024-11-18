@@ -9,10 +9,9 @@ import { chatFilterT, ChatListT } from "../../types/chat";
 import { LocalWsContext } from "../contexts/local-ws-ctx";
 
 export default function ChatList() {
-  const { message, setMessage } = useWebSocket();
+  const { message, sendMessage } = useWebSocket();
   const {
     fields,
-    handleFetch,
     handleNextPage,
     hasNext,
     loading,
@@ -20,27 +19,49 @@ export default function ChatList() {
     raw_error,
     setData,
     setFields,
+    setFetch,
   } = useAppBase<ChatListT, chatFilterT>(
     { limit: 10, offset: 0, title: "" },
-    `/chat/getList`
+    `/chat/getList`,
+    "No Chat Found:(\ntry make a new chat."
   );
 
   function handleFilter(value: string) {
-    setFields({ limit: 10, offset: 10, title: value });
+    setFields({ limit: 10, offset: 0, title: value });
+    setFetch((c) => !c);
   }
 
   useEffect(() => {
     if (message && raw_data) {
-      const tmp_data = raw_data.results.filter(
-        (i) => i.id != message.updated_chat.id
-      );
-      const tmp_list = tmp_data
-        ? [message.updated_chat, ...tmp_data]
-        : [message.updated_chat];
-      setData({ ...raw_data, results: tmp_list });
-      setFields({ offset: fields.offset! + 1, limit: fields.limit! + 1 });
-    } else {
-      handleFetch();
+      // console.log(message);
+      if (
+        message.action == "chat_create" ||
+        message.action == "message_create"
+      ) {
+        const tmp_data = raw_data.results.filter(
+          (i) => i.id != message.updated_chat.id
+        );
+        const tmp_list = tmp_data
+          ? [message.updated_chat, ...tmp_data]
+          : [message.updated_chat];
+        setData({
+          ...raw_data,
+          total: raw_data.total + 1,
+          limit: tmp_list.length,
+          results: tmp_list,
+        });
+        setFields({ limit: tmp_list.length });
+      } else if (message.action == "online_status") {
+        const tmp_list = raw_data.results.map((i) =>
+          i.id == message.updated_chat.id
+            ? {
+                ...i,
+                is_online: message.user_status,
+              }
+            : i
+        );
+        setData({ ...raw_data, results: tmp_list });
+      }
     }
   }, [message]);
 
@@ -50,7 +71,7 @@ export default function ChatList() {
         <DefaultInput onChange={handleFilter} placeholder="Search chats" />
       </div>
       {fields.title && (
-        <LocalWsContext.Provider value={{ setMessage }}>
+        <LocalWsContext.Provider value={{ sendMessage }}>
           <UserList title={fields.title} />
         </LocalWsContext.Provider>
       )}
@@ -59,7 +80,7 @@ export default function ChatList() {
       )}
       <div className="flex flex-col gap-1">
         {raw_data?.results.map((i) => (
-          <ChatItem key={i.title} data={i} />
+          <ChatItem key={i.id} data={i} />
         ))}
         <AutoDataLoader
           error={raw_error}

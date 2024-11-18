@@ -25,7 +25,7 @@ export default function LoginForm() {
   useEffect(() => {
     if (data) {
       const api = new ApiService();
-      api.saveToken(data.data.token);
+      api.saveToken(data.data);
       navigate("/");
     }
   }, [data, error, navigate]);
@@ -42,12 +42,14 @@ export default function LoginForm() {
               value={fields.username}
               onChange={(s) => dispatch({ username: s })}
               placeholder="Enter username"
+              handleEnter={handleFetch}
             />
             <DefaultInput
               type="password"
               value={fields.password}
               onChange={(s) => dispatch({ password: s })}
               placeholder="Enter password"
+              handleEnter={handleFetch}
             />
           </div>
         </div>

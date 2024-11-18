@@ -1,8 +1,8 @@
 import { createContext } from "react";
-import { wsMessage } from "../../types/message";
+import { wsMessageInput } from "../../types/message";
 
 interface ctxT {
-  setMessage: (c: wsMessage) => any;
+  sendMessage: (c: wsMessageInput) => any;
 }
 
-export const LocalWsContext = createContext<ctxT>({ setMessage: () => {} });
+export const LocalWsContext = createContext<ctxT>({ sendMessage: () => {} });

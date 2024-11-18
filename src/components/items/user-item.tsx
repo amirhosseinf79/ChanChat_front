@@ -7,7 +7,7 @@ import ProfilePhoto from "../profile-photo";
 import { AppContext } from "../contexts/app-context";
 import { ChatT } from "../../types/chat";
 import { LocalWsContext } from "../contexts/local-ws-ctx";
-import { wsMessage } from "../../types/message";
+import { wsMessageInput } from "../../types/message";
 
 interface prp {
   data: userT;
@@ -15,7 +15,7 @@ interface prp {
 
 export default function UserItem({ data }: prp) {
   const { setChatDetails } = useContext(AppContext);
-  const { setMessage } = useContext(LocalWsContext);
+  const { sendMessage } = useContext(LocalWsContext);
   const { data: cData, handleFetch } = PostFetch<createChatField>({
     url: "/chat/create",
     fields: { start_with: data.id },
@@ -24,11 +24,11 @@ export default function UserItem({ data }: prp) {
   useEffect(() => {
     if (cData) {
       setChatDetails!(cData.data as ChatT);
-      const data: wsMessage = {
-        updated_chat: cData.data as ChatT,
+      const data: wsMessageInput = {
         message: undefined,
+        action: "chat_create",
       };
-      setMessage(data);
+      sendMessage(data);
     }
   }, [cData]);
 

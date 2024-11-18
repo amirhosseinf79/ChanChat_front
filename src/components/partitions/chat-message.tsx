@@ -2,40 +2,79 @@ import { useContext, useEffect } from "react";
 import { AppContext } from "../contexts/app-context";
 import useWebSocket from "../websocket";
 import useAppBase from "./base";
-import { messageFilterT, messageListT } from "../../types/message";
+import {
+  initMessageFilter,
+  messageFilterT,
+  messageListT,
+} from "../../types/message";
+import MessageHeader from "../../message-sections/message-header";
+import MessageBody from "../../message-sections/message-body";
+import { MessageContext } from "../contexts/message-contexts";
 
 export default function ChatMessage() {
   const { chatDetails, setChatDetails } = useContext(AppContext);
   const {
-    fields,
-    handleFetch,
     handleNextPage,
     hasNext,
     loading,
     raw_data,
+    raw_error,
     setData,
     setFields,
   } = useAppBase<messageListT, messageFilterT>(
-    { content: "", from_date: "", limit: 10, offset: 0, to_date: "" },
-    `/chat/${chatDetails!.id}/getMessages`
+    initMessageFilter,
+    `/chat/${chatDetails!.id}/getMessages`,
+    "No Message Found :(\nTry Send a new Message."
   );
-  const { message } = useWebSocket(chatDetails!.id);
+  const { message, sendMessage } = useWebSocket(chatDetails!.id);
 
   useEffect(() => {
     if (message && raw_data) {
-      const tmp_data = raw_data.results.filter(
-        (i) => i.id != message.message!.id
-      );
-      setChatDetails!(message.updated_chat);
-      const tmp_list = tmp_data
-        ? [message.message!, ...tmp_data]
-        : [message.message!];
-      setData({ ...raw_data, results: tmp_list });
-      setFields({ offset: fields.offset! + 1, limit: fields.limit! + 1 });
-    } else {
-      handleFetch();
+      // console.log(message);
+      if (
+        message.action == "chat_create" ||
+        message.action == "message_create"
+      ) {
+        if (message.message) {
+          const tmp_data = raw_data.results.filter(
+            (i) => i.id != message.message!.id
+          );
+          const tmp_list = tmp_data
+            ? [message.message, ...tmp_data]
+            : [message.message];
+          // console.log(tmp_data, tmp_list);
+          const newData = {
+            ...raw_data,
+            total: raw_data.total + 1,
+            limit: tmp_list.length,
+            results: tmp_list,
+          };
+          setData(newData);
+          // console.log(1, newData);
+          setFields({ limit: tmp_list.length });
+        }
+      } else if (message.action == "online_status") {
+        setChatDetails!({ ...chatDetails!, is_online: message.user_status });
+      }
     }
   }, [message]);
 
-  return <>{chatDetails?.id}</>;
+  return (
+    <MessageContext.Provider
+      value={{
+        messageList: raw_data,
+        messageError: raw_error,
+        handleNextPage,
+        sendMessage,
+        hasNext,
+        loading,
+        message,
+      }}
+    >
+      <div className="flex flex-col justify-between h-full">
+        <MessageHeader />
+        <MessageBody />
+      </div>
+    </MessageContext.Provider>
+  );
 }
