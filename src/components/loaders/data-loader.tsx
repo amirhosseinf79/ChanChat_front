@@ -24,6 +24,7 @@ export default function DataLoader({ children, error, loading }: prp) {
         </div>
       );
     } else if (error.status == 401) navigate("/auth");
+    else if (error.status == 403) navigate("/auth");
   } else {
     return children;
   }
