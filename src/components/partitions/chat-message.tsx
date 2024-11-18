@@ -55,6 +55,18 @@ export default function ChatMessage() {
         }
       } else if (message.action == "online_status") {
         setChatDetails!({ ...chatDetails!, is_online: message.user_status });
+      } else if (message.action == "message_edit") {
+        if (!message.message) return;
+        const tmp_list = raw_data.results.map((i) =>
+          i.id == message.message!.id
+            ? {
+                ...i,
+                text: message.message?.text,
+                caption: message.message?.caption,
+              }
+            : i
+        );
+        setData({ ...raw_data, results: tmp_list });
       }
     }
   }, [message]);

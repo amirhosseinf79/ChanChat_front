@@ -3,6 +3,7 @@ import { wsMessage, wsMessageInput } from "../types/message";
 import ApiService from "../services/base-api";
 
 const useWebSocket = (id?: number) => {
+  const [connStatus, setStatus] = useState("connecting...");
   const [message, setMessage] = useState<wsMessage>();
   const [ws, setWs] = useState<WebSocket | null>(null);
 
@@ -16,21 +17,25 @@ const useWebSocket = (id?: number) => {
 
     websocket.onopen = () => {
       console.log("Websocket connected!");
+      setStatus("");
     };
 
     // Handle incoming messages
     websocket.onmessage = (event) => {
       setMessage(JSON.parse(event.data));
+      setStatus("");
     };
 
     // Handle WebSocket errors
     websocket.onerror = (error) => {
       console.error("WebSocket error:", error);
+      setStatus("Network Error");
     };
 
     // Handle WebSocket connection close
     websocket.onclose = () => {
       console.log("WebSocket connection closed");
+      setStatus("Network Error");
     };
 
     setWs(websocket);
@@ -47,7 +52,7 @@ const useWebSocket = (id?: number) => {
     }
   };
 
-  return { ws, sendMessage, message, setMessage };
+  return { ws, sendMessage, message, setMessage, connStatus };
 };
 
 export default useWebSocket;

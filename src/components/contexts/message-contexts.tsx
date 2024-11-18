@@ -1,5 +1,11 @@
 import { createContext } from "react";
-import { messageListT, wsMessage, wsMessageInput } from "../../types/message";
+import {
+  messageCreateFields,
+  messageListT,
+  Reply,
+  wsMessage,
+  wsMessageInput,
+} from "../../types/message";
 import errorType from "../../types/error";
 
 interface ctxT {
@@ -18,3 +24,12 @@ export const MessageContext = createContext<ctxT>({
   loading: false,
   sendMessage: () => {},
 });
+
+interface ctx2T {
+  fields?: messageCreateFields;
+  setFields?: (c: messageCreateFields) => any;
+  replyObj?: Reply;
+  setReplyObj?: (c: Reply | undefined) => any;
+}
+
+export const MessageActionContext = createContext<ctx2T>({});

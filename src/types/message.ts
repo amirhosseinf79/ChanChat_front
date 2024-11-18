@@ -35,7 +35,12 @@ export interface messageTypeT {
   Message: "message" | "video" | "photo";
 }
 
-type wsActionT = "typing" | "message_create" | "chat_create" | "online_status";
+type wsActionT =
+  | "typing"
+  | "message_create"
+  | "chat_create"
+  | "online_status"
+  | "message_edit";
 
 export interface wsMessage {
   updated_chat: ChatT;
@@ -58,11 +63,20 @@ export type messageFilterT = {
 };
 
 export interface messageCreateFields {
+  message_id?: number;
   reply_id?: number;
   type?: messageTypeT | string;
   text?: string;
   caption?: string;
 }
+
+export const initMessageFields: messageCreateFields = {
+  caption: undefined,
+  reply_id: undefined,
+  message_id: undefined,
+  text: undefined,
+  type: "message",
+};
 
 export const initMessageFilter: messageFilterT = {
   content: "",

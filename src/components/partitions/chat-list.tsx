@@ -7,9 +7,10 @@ import useWebSocket from "../websocket";
 import useAppBase from "./base";
 import { chatFilterT, ChatListT } from "../../types/chat";
 import { LocalWsContext } from "../contexts/local-ws-ctx";
+import ErrorBox from "../boxes/error-box";
 
 export default function ChatList() {
-  const { message, sendMessage } = useWebSocket();
+  const { message, sendMessage, connStatus } = useWebSocket();
   const {
     fields,
     handleNextPage,
@@ -77,6 +78,12 @@ export default function ChatList() {
       )}
       {fields.title && (
         <div className="pb-1 border-b text-xl font-bold">Chats:</div>
+      )}
+      {connStatus && (
+        <ErrorBox
+          error={{ status: [connStatus] }}
+          className="dark:bg-blue-600 bg-blue-500 flex justify-center"
+        />
       )}
       <div className="flex flex-col gap-1">
         {raw_data?.results.map((i) => (

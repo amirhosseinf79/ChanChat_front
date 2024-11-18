@@ -3,18 +3,19 @@ import getStrDate from "../../services/calculate-date";
 import { ChatT } from "../../types/chat";
 import { AppContext } from "../contexts/app-context";
 import ProfilePhoto from "../profile-photo";
+import { sentByMe } from "../../services/auth";
 
 interface prp {
   data: ChatT;
 }
 
 export default function ChatItem({ data }: prp) {
-  const { setChatDetails } = useContext(AppContext);
+  const { setChatDetails, chatDetails } = useContext(AppContext);
 
   return (
     <div
       className="flex gap-2 dark:bg-indigo-800 dark:text-white text-black bg-indigo-200 p-3 cursor-pointer"
-      onClick={() => setChatDetails!(data)}
+      onClick={() => setChatDetails!(chatDetails ? undefined : data)}
     >
       <ProfilePhoto is_online={data.is_online} size="lg" />
       <div className="flex flex-col w-full gap-1">
@@ -27,11 +28,13 @@ export default function ChatItem({ data }: prp) {
             {data.last_message?.preview ?? "no message"}
           </p>
           <div className="flex flex-col justify-end">
-            {data.last_message?.seen_users && data.last_message.sent_by_me && (
-              <div className="bg-indigo-200 text-indigo-600 p-1 rounded-xl">
-                Seen
-              </div>
-            )}
+            {data.last_message?.seen_users &&
+              data.last_message?.seen_users.length > 0 &&
+              !sentByMe(data.last_message.author.id) && (
+                <div className="bg-indigo-200 text-indigo-600 p-1 rounded-xl">
+                  Seen
+                </div>
+              )}
           </div>
         </div>
       </div>
