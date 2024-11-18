@@ -35,7 +35,7 @@ export default function DefaultInput({
       )}
       <input
         type={type ?? undefined}
-        value={value}
+        value={value || ""}
         onChange={(e) => onChange(e.target.value)}
         className={`px-3 py-2 dark:bg-white text-black rounded-md w-full ${className}`}
         placeholder={placeholder}
