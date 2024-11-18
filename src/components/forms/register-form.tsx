@@ -44,7 +44,7 @@ export default function RegisterForm() {
                 />
               )}
             </div>
-            <h2 className="text-3xl w-full text-center">Register</h2>
+            <h2 className="text-3xl w-full text-center text-white">Register</h2>
             <div className="w-28"></div>
           </div>
           <div className="md:mx-0 mx-5">
