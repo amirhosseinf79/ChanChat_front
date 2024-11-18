@@ -51,7 +51,7 @@ export default function AutoDataLoader({
           className="w-full flex justify-center items-center p-5"
           ref={componentRef}
         >
-          <TextBtn handler={handleLoader} className="mt-1" value="Load more" />
+          <TextBtn handler={handleLoader} value="Load more" />
         </div>
       )}
     </DataLoader>
