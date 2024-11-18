@@ -83,7 +83,7 @@ export default function ChatMessage() {
         message,
       }}
     >
-      <div className="flex flex-col justify-between h-full">
+      <div className="flex flex-col h-full">
         <MessageHeader />
         <MessageBody />
       </div>

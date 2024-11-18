@@ -17,7 +17,7 @@ export default function MainApp() {
       <div className="md:hidden flex flex-col gap-1">
         <ChatList />
         {chatDetails && (
-          <div className="fixed top-0 left-0 w-full h-full dark:bg-indigo-950 bg-indigo-200">
+          <div className="fixed top-0 left-0 w-screen h-screen dark:bg-indigo-950 bg-indigo-200">
             <ChatMessage />
           </div>
         )}

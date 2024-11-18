@@ -56,7 +56,13 @@ export default function MessageBody() {
             ))}
           </div>
         </div>
-        <div className="fixed">
+        <div
+          className={
+            messageList?.results && messageList.results.length > 0
+              ? "h-1/4"
+              : ""
+          }
+        >
           <MessageTextInput />
         </div>
       </div>
