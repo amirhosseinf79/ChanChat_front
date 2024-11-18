@@ -72,6 +72,7 @@ export default function ChatList() {
           onChange={handleFilter}
           placeholder="Search chats"
           className="rounded-none"
+          value={fields.title}
         />
         {connStatus && (
           <ErrorBox
