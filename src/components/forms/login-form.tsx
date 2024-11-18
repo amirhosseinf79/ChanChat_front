@@ -31,7 +31,7 @@ export default function LoginForm() {
   }, [data, error, navigate]);
 
   return (
-    <div className="flex flex-col md:h-auto h-[92vh] gap-6 bg-inherit md:p-5 p-0 md:w-96">
+    <div className="flex flex-col md:h-auto h-[88vh] gap-6 bg-inherit md:p-5 p-0 md:w-96">
       <div className="flex flex-col justify-between gap-6 h-full overflow-auto">
         <div className="flex flex-col gap-5">
           <div className="flex justify-center md:pb-5 md:p-0 p-5 md:border-b border-b-none border-b-white md:bg-transparent bg-indigo-700">

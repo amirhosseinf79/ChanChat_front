@@ -17,7 +17,7 @@ export default function MainApp() {
       <div className="md:hidden flex flex-col gap-1">
         <ChatList />
         {chatDetails && (
-          <div className="fixed top-0 left-0 w-screen h-screen overflow-auto">
+          <div className="fixed top-0 left-0 w-screen h-[92vh] overflow-auto">
             <ChatMessage />
           </div>
         )}
