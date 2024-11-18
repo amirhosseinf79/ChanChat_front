@@ -7,7 +7,7 @@ import MainApp from "./pages/app.tsx";
 
 const appSections = createBrowserRouter([
   {
-    path: "/",
+    path: "",
     element: <MainApp />,
     errorElement: <NotFound />,
   },
