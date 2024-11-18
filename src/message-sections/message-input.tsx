@@ -7,6 +7,7 @@ import DefaultInput from "../components/element/text-input/input";
 import DefaultBtn from "../components/element/button/default-btn";
 import { AppContext } from "../components/contexts/app-context";
 import {
+  initMessageFields,
   messageCreateFields,
   messageT,
   wsMessageInput,
@@ -68,6 +69,7 @@ export default function MessageTextInput() {
   function clearFields() {
     if (!setFields || !setReplyObj) return;
     setReplyObj(undefined);
+    setFields(initMessageFields);
   }
 
   function handleSendMessage() {

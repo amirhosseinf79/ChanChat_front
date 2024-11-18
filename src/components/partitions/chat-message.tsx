@@ -31,10 +31,7 @@ export default function ChatMessage() {
   useEffect(() => {
     if (message && raw_data) {
       // console.log(message);
-      if (
-        message.action == "chat_create" ||
-        message.action == "message_create"
-      ) {
+      if (message.action == "message_create") {
         if (message.message) {
           const tmp_data = raw_data.results.filter(
             (i) => i.id != message.message!.id
@@ -45,7 +42,7 @@ export default function ChatMessage() {
           // console.log(tmp_data, tmp_list);
           const newData = {
             ...raw_data,
-            total: raw_data.total + 1,
+            total: raw_data.total,
             limit: tmp_list.length,
             results: tmp_list,
           };
@@ -83,7 +80,7 @@ export default function ChatMessage() {
         message,
       }}
     >
-      <div className="flex flex-col h-full">
+      <div className="flex flex-col h-full dark:bg-indigo-950 bg-indigo-200 relative">
         <MessageHeader />
         <MessageBody />
       </div>

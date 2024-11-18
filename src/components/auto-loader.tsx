@@ -18,6 +18,8 @@ export default function AutoDataLoader({
   const componentRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
+    if (!componentRef) return;
+
     const handleVisibility = (entries: IntersectionObserverEntry[]) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -28,7 +30,7 @@ export default function AutoDataLoader({
     };
 
     const observer = new IntersectionObserver(handleVisibility, {
-      threshold: 0.1,
+      threshold: 0.2,
     });
 
     if (componentRef.current) {
@@ -36,17 +38,17 @@ export default function AutoDataLoader({
     }
 
     return () => {
-      if (componentRef!.current) {
-        observer.unobserve(componentRef!.current);
+      if (componentRef.current) {
+        observer.unobserve(componentRef.current);
       }
     };
-  }, [componentRef.current]);
+  }, [componentRef]);
 
   return (
     <DataLoader loading={loading} error={error}>
       {showCondition && (
         <div
-          className="w-full flex justify-center items-center"
+          className="w-full flex justify-center items-center p-5"
           ref={componentRef}
         >
           <TextBtn handler={handleLoader} className="mt-1" value="Load more" />

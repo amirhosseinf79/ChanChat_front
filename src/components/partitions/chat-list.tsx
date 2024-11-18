@@ -47,7 +47,6 @@ export default function ChatList() {
           : [message.updated_chat];
         setData({
           ...raw_data,
-          total: raw_data.total + 1,
           limit: tmp_list.length,
           results: tmp_list,
         });
@@ -68,8 +67,18 @@ export default function ChatList() {
 
   return (
     <div className="flex flex-col gap-2">
-      <div>
-        <DefaultInput onChange={handleFilter} placeholder="Search chats" />
+      <div className="">
+        <DefaultInput
+          onChange={handleFilter}
+          placeholder="Search chats"
+          className="rounded-none"
+        />
+        {connStatus && (
+          <ErrorBox
+            error={{ status: [connStatus] }}
+            className="dark:bg-blue-600 bg-blue-500 flex justify-center rounded-none"
+          />
+        )}
       </div>
       {fields.title && (
         <LocalWsContext.Provider value={{ sendMessage }}>
@@ -78,12 +87,6 @@ export default function ChatList() {
       )}
       {fields.title && (
         <div className="pb-1 border-b text-xl font-bold">Chats:</div>
-      )}
-      {connStatus && (
-        <ErrorBox
-          error={{ status: [connStatus] }}
-          className="dark:bg-blue-600 bg-blue-500 flex justify-center"
-        />
       )}
       <div className="flex flex-col gap-1">
         {raw_data?.results.map((i) => (

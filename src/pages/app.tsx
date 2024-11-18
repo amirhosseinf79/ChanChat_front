@@ -8,7 +8,7 @@ export default function MainApp() {
   const [chatDetails, setChatDetails] = useState<ChatT | undefined>();
   return (
     <AppContext.Provider value={{ chatDetails, setChatDetails }}>
-      <div className="md:flex flex-row gap-1 hidden md:h-[88vh] h-[92vh]">
+      <div className="md:flex flex-row gap-1 hidden h-screen w-full">
         <div className="w-1/4 h-full overflow-auto">
           <ChatList />
         </div>
@@ -17,7 +17,7 @@ export default function MainApp() {
       <div className="md:hidden flex flex-col gap-1">
         <ChatList />
         {chatDetails && (
-          <div className="fixed top-0 left-0 w-screen h-screen dark:bg-indigo-950 bg-indigo-200">
+          <div className="fixed top-0 left-0 w-screen h-screen overflow-auto">
             <ChatMessage />
           </div>
         )}

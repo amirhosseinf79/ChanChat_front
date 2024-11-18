@@ -7,7 +7,7 @@ export default function ErrorBox({ error, className }: prp) {
   return (
     <>
       {error && (
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1 text-white">
           {Object.keys(error).map((key: string) =>
             error[key].map((msg: string) => (
               <div

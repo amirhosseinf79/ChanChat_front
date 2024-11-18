@@ -4,10 +4,13 @@ import ApiService from "../services/base-api";
 
 const useWebSocket = (id?: number) => {
   const [connStatus, setStatus] = useState("connecting...");
+  const [isConnected, setIsConnected] = useState<boolean>(false);
   const [message, setMessage] = useState<wsMessage>();
   const [ws, setWs] = useState<WebSocket | null>(null);
 
   useEffect(() => {
+    if (isConnected) return;
+
     // Initialize the WebSocket connection
     const api = new ApiService();
     const url = id ? `${api.ws_url}/ws/chat/${id}/` : `${api.ws_url}/ws/chat/`;
@@ -15,6 +18,7 @@ const useWebSocket = (id?: number) => {
 
     websocket.onopen = () => {
       console.log("Websocket connected!");
+      setIsConnected(true);
       setStatus("");
     };
 
@@ -27,17 +31,19 @@ const useWebSocket = (id?: number) => {
     // Handle WebSocket errors
     websocket.onerror = (error) => {
       console.error("WebSocket error:", error);
-      setStatus("Network Error");
+      setStatus("connecting...");
+      setIsConnected(false);
     };
 
     // Handle WebSocket connection close
     websocket.onclose = () => {
       console.log("WebSocket connection closed");
-      setStatus("Network Error");
+      setStatus("connecting...");
+      setIsConnected(false);
     };
 
     setWs(websocket);
-  }, []);
+  }, [isConnected]);
 
   // Function to send a message
   const sendMessage = (message: wsMessageInput) => {

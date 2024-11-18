@@ -26,12 +26,14 @@ export default function useAppBase<T1 extends t1, T2 extends t2>(
   });
 
   const hasNext = () => {
-    return raw_data ? raw_data.total > fields.limit! : false;
+    console.log(raw_data?.total, fields.limit);
+    return raw_data && fields.limit ? raw_data.total > fields.limit : false;
   };
 
   const handleNextPage = () => {
-    if (hasNext()) {
-      setFields({ offset: fields.limit, limit: fields.limit! + 10 } as T2);
+    if (hasNext() && raw_data) {
+      const filter = { offset: raw_data.limit, limit: raw_data.limit! + 10 };
+      setFields(filter as T2);
       setFetch((i) => !i);
     }
   };
@@ -51,13 +53,16 @@ export default function useAppBase<T1 extends t1, T2 extends t2>(
     } else {
       setData(data);
     }
+    setFields({ offset: data.offset, limit: data.limit } as T2);
   };
 
   useEffect(() => {
+    console.log(1, fields);
     handleFetch();
   }, [canFetch]);
 
   useEffect(() => {
+    console.log(2, fields);
     setError(undefined);
     if (data) processData(data.data);
     if (error) {

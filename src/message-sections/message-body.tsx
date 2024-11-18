@@ -14,9 +14,16 @@ import {
 import { formReducer } from "../components/contexts/form-reducer";
 
 export default function MessageBody() {
+  const [isScrolled, setScrolled] = useState(false);
   const targetRef = useRef<HTMLDivElement>(null);
-  const { loading, hasNext, handleNextPage, messageList, messageError } =
-    useContext(MessageContext);
+  const {
+    loading,
+    hasNext,
+    handleNextPage,
+    messageList,
+    messageError,
+    message,
+  } = useContext(MessageContext);
 
   const [replyObj, setReplyObj] = useState<Reply>();
   const [fields, setFields] = useReducer(
@@ -25,27 +32,24 @@ export default function MessageBody() {
   );
 
   useEffect(() => {
+    setScrolled(false);
+  }, [message]);
+
+  useEffect(() => {
     // targetRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-    if (targetRef.current) {
+    if (targetRef.current && !isScrolled) {
       targetRef.current.scrollTop = targetRef.current.scrollHeight;
+      if (messageList?.results && messageList.results.length > 0)
+        setScrolled(true);
     }
-  }, [messageList]);
+  }, [messageList, isScrolled]);
 
   return (
     <MessageActionContext.Provider
       value={{ replyObj, setReplyObj, fields, setFields }}
     >
-      <div className="flex flex-col h-full">
-        <div
-          className="flex flex-col gap-1 h-full p-2 overflow-auto"
-          ref={targetRef}
-        >
-          <AutoDataLoader
-            error={messageError}
-            handleLoader={handleNextPage}
-            loading={loading}
-            showCondition={hasNext()}
-          />
+      <div className="flex flex-col h-full overflow-auto pb-14" ref={targetRef}>
+        <div className="flex flex-col gap-1 p-2">
           <div className="flex flex-col-reverse gap-2">
             {messageList?.results.map((v, i) => (
               <MsgItem
@@ -54,15 +58,15 @@ export default function MessageBody() {
                 prevAuthor={messageList.results[i - 1]?.author}
               />
             ))}
+            <AutoDataLoader
+              error={messageError}
+              handleLoader={handleNextPage}
+              loading={loading}
+              showCondition={hasNext()}
+            />
           </div>
         </div>
-        <div
-          className={
-            messageList?.results && messageList.results.length > 0
-              ? "h-1/4"
-              : ""
-          }
-        >
+        <div className="absolute bottom-0 left-0 w-full">
           <MessageTextInput />
         </div>
       </div>
