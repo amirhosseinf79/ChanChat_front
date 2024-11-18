@@ -96,12 +96,12 @@ export default function MsgItem({ data, prevAuthor }: prp) {
       )}
       <div
         id={`msg_${data.id}`}
-        className={`p-1 max-w-72 min-w-40 flex flex-col rounded-lg gap-1 text-white ${bgColor}`}
+        className={`p-1 max-w-72 min-w-40 flex flex-col rounded-lg gap-1 text-white text-wrap overflow-hidden ${bgColor}`}
       >
         <HeaderContainer data={data} />
         <ReplyContainer data={data.reply} sentByMe={sentByMe(data.author.id)} />
         {data.type == "photo" && <ImageContainer url={data.image} />}
-        <div className="px-1">
+        <div className="px-1 text-wrap" dir="auto">
           {data.type == "message" ? data.text : data.caption}
         </div>
         <div className="flex flex-row-reverse justify-between gap-4 items-center">

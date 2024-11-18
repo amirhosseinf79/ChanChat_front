@@ -20,7 +20,7 @@ export default function DefaultInput({
   type,
 }: prp) {
   function handleEnterEvent(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.code == "Enter" && handleEnter) {
+    if (e.key == "Enter" && handleEnter) {
       handleEnter();
       onChange("");
     }
@@ -34,12 +34,13 @@ export default function DefaultInput({
         </div>
       )}
       <input
+        dir="auto"
         type={type ?? undefined}
         value={value || ""}
         onChange={(e) => onChange(e.target.value)}
         className={`px-3 py-2 dark:bg-white text-black rounded-md w-full ${className}`}
         placeholder={placeholder}
-        onKeyUp={handleEnterEvent}
+        onKeyDown={handleEnterEvent}
       />
     </div>
   );

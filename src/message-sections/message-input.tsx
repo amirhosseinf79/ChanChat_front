@@ -102,6 +102,7 @@ export default function MessageTextInput() {
           handleEnter={handleSendMessage}
         />
         <DefaultBtn
+          disabled={sendLoading}
           loading={sendLoading}
           value="send"
           handler={handleSendMessage}

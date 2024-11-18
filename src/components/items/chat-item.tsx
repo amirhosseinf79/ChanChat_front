@@ -3,7 +3,7 @@ import getStrDate from "../../services/calculate-date";
 import { ChatT } from "../../types/chat";
 import { AppContext } from "../contexts/app-context";
 import ProfilePhoto from "../profile-photo";
-import { sentByMe } from "../../services/auth";
+import { generateChatTitle, sentByMe } from "../../services/auth";
 
 interface prp {
   data: ChatT;
@@ -20,7 +20,7 @@ export default function ChatItem({ data }: prp) {
       <ProfilePhoto is_online={data.is_online} size="lg" />
       <div className="flex flex-col w-full gap-1">
         <div className="flex justify-between gap-4">
-          <div>{data.title}</div>
+          <div>{generateChatTitle(data.title)}</div>
           <div>{getStrDate(data.last_message?.created_at)}</div>
         </div>
         <div className="flex justify-between gap-1">

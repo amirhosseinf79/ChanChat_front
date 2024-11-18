@@ -9,11 +9,15 @@ export interface ChatT {
   id: number;
   is_group: boolean;
   is_joined: boolean;
-  title: string;
+  title: titleT;
   is_online: boolean;
   members: number;
   unread_messages: number;
   last_message: LastMessageT | null;
+}
+
+export interface titleT {
+  [key: string]: string;
 }
 
 export interface AuthorT {

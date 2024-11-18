@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { AppContext } from "../components/contexts/app-context";
 import ProfilePhoto from "../components/profile-photo";
 import TextBtn from "../components/element/button/text-btn";
+import { generateChatTitle } from "../services/auth";
 
 export default function MessageHeader() {
   const { chatDetails, setChatDetails } = useContext(AppContext);
@@ -17,7 +18,7 @@ export default function MessageHeader() {
         </div>
         <ProfilePhoto is_online={chatDetails?.is_online} size="md" />
         <div className="flex flex-col">
-          <div className="text-lg">{chatDetails?.title}</div>
+          <div className="text-lg">{generateChatTitle(chatDetails?.title)}</div>
           <div className="">
             {chatDetails?.is_group ? (
               <>{chatDetails.members} members</>
