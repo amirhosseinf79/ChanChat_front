@@ -10,9 +10,7 @@ const useWebSocket = (id?: number) => {
   useEffect(() => {
     // Initialize the WebSocket connection
     const api = new ApiService();
-    const url = id
-      ? `ws://${api.base_url}/ws/chat/${id}/`
-      : `ws://${api.base_url}/ws/chat/`;
+    const url = id ? `${api.ws_url}/ws/chat/${id}/` : `${api.ws_url}/ws/chat/`;
     const websocket = new WebSocket(`${url}?token=${api.getToken()}`);
 
     websocket.onopen = () => {
