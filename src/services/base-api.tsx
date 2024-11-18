@@ -3,8 +3,8 @@ import responseType, { methodList } from "../types/response";
 class Api {
   public tmp_url = "api.smart-vip.ir";
   public base_url = "api.smart-vip.ir";
-  public ws_url = "ws://" + this.base_url;
-  public api_url = `http://${this.base_url}/api`;
+  public ws_url = "wss://" + this.base_url;
+  public api_url = `https://${this.base_url}/api`;
 
   public getUrl(path: `/${string}`) {
     return this.api_url + path;
