@@ -14,7 +14,7 @@ function HeaderContainer({ data }: { data: messageT }) {
     : "flex-row-reverse justify-between";
 
   const userInfo = !sentByMe(data.author.id) && (
-    <p className="text-white">
+    <p className="text-white font-bold">
       {data.author.first_name} {data.author.last_name}
     </p>
   );

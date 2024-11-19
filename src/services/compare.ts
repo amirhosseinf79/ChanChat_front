@@ -13,9 +13,8 @@ function isEdited(dt1: string, dt2: string) {
   const date1 = new Date(dt1);
   const date2 = new Date(dt2);
 
-  console.log(dt1, dt2);
-
-  if (date1.getTime() != date2.getTime()) return true;
+  if (Math.round(date1.getTime() / 1000) != Math.round(date2.getTime() / 1000))
+    return true;
   return false;
 }
 
