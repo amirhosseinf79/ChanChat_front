@@ -5,7 +5,7 @@ import UserList from "./user-list";
 import AutoDataLoader from "../auto-loader";
 import useWebSocket from "../websocket";
 import useAppBase from "./base";
-import { chatFilterT, ChatListT } from "../../types/chat";
+import { chatFilterT, ChatListT, ChatT } from "../../types/chat";
 import { LocalWsContext } from "../contexts/local-ws-ctx";
 import ErrorBox from "../boxes/error-box";
 
@@ -57,6 +57,21 @@ export default function ChatList() {
             ? {
                 ...i,
                 is_online: message.user_status,
+              }
+            : i
+        );
+        setData({ ...raw_data, results: tmp_list });
+      } else if (message.action == "mark_read") {
+        if (!message.updated_chat.last_message) return;
+
+        const tmp_list: ChatT[] = raw_data.results.map((i) =>
+          i.id == message.updated_chat.id
+            ? {
+                ...i,
+                last_message: {
+                  ...i.last_message!,
+                  seen_users: message.updated_chat.last_message!.seen_users,
+                },
               }
             : i
         );

@@ -24,7 +24,8 @@ const useWebSocket = (id?: number) => {
 
     // Handle incoming messages
     websocket.onmessage = (event) => {
-      setMessage(JSON.parse(event.data));
+      const raw: wsMessage = JSON.parse(event.data);
+      setMessage(raw);
       setStatus("");
     };
 

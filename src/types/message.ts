@@ -48,11 +48,12 @@ export interface wsMessage {
   user_status: boolean;
   action: wsActionT;
   message?: messageT;
+  time: number;
 }
 
 export interface wsMessageInput {
   action: wsActionT;
-  message?: messageT;
+  message?: messageT | { id: number };
 }
 
 export type messageFilterT = {

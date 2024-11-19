@@ -45,16 +45,20 @@ export default function ChatMessage() {
     });
 
   useEffect(() => {
-    const tmp_data: wsMessageInput = {
-      action: "mark_read",
-    };
-    if (readData) sendMessage(tmp_data);
+    if (raw_data?.results.length) {
+      const tmp_data: wsMessageInput = {
+        action: "mark_read",
+        message: { id: raw_data.results[0].id },
+      };
+      sendMessage(tmp_data);
+    }
   }, [readData]);
 
   useEffect(() => {
     if (raw_data?.results.length && !isRead) {
       markRead();
       setIsRead(true);
+      // console.log("aaa");
     }
   }, [raw_data, isRead]);
 
@@ -96,12 +100,16 @@ export default function ChatMessage() {
         );
         setData({ ...raw_data, results: tmp_list });
       } else if (message.action == "mark_read") {
-        const tmp_list: messageT[] = raw_data.results.map((i: messageT) => {
-          return {
-            ...i,
-            seen_by: [message.updated_chat.last_message!.author],
-          };
-        });
+        if (!message.updated_chat.last_message) return;
+
+        const tmp_list: messageT[] = raw_data.results.map((i: messageT) =>
+          i.id <= message.message!.id
+            ? {
+                ...i,
+                seen_by: message.updated_chat.last_message!.seen_users,
+              }
+            : i
+        );
         setData({ ...raw_data, results: tmp_list });
       }
     }

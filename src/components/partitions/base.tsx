@@ -26,7 +26,6 @@ export default function useAppBase<T1 extends t1, T2 extends t2>(
   });
 
   const hasNext = () => {
-    console.log(raw_data?.total, fields.limit);
     return raw_data && fields.limit ? raw_data.total > fields.limit : false;
   };
 
@@ -57,12 +56,10 @@ export default function useAppBase<T1 extends t1, T2 extends t2>(
   };
 
   useEffect(() => {
-    console.log(1, fields);
     handleFetch();
   }, [canFetch]);
 
   useEffect(() => {
-    console.log(2, fields);
     setError(undefined);
     if (data) processData(data.data);
     if (error) {

@@ -31,7 +31,7 @@ export default function ChatItem({ data }: prp) {
             {data.last_message?.seen_users &&
               data.last_message?.seen_users.length > 0 &&
               sentByMe(data.last_message.author.id) && (
-                <div className="bg-indigo-200 text-indigo-600 p-1 rounded-xl">
+                <div className="bg-indigo-200 text-indigo-600 p-1 pt-0 rounded-xl">
                   Seen
                 </div>
               )}
