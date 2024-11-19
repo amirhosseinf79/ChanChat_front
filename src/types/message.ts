@@ -40,7 +40,8 @@ type wsActionT =
   | "message_create"
   | "chat_create"
   | "online_status"
-  | "message_edit";
+  | "message_edit"
+  | "mark_read";
 
 export interface wsMessage {
   updated_chat: ChatT;

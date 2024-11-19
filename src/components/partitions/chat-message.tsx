@@ -1,15 +1,19 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../contexts/app-context";
 import useWebSocket from "../websocket";
 import useAppBase from "./base";
 import {
   initMessageFilter,
+  messageCreateFields,
   messageFilterT,
   messageListT,
+  messageT,
+  wsMessageInput,
 } from "../../types/message";
 import MessageHeader from "../../message-sections/message-header";
 import MessageBody from "../../message-sections/message-body";
 import { MessageContext } from "../contexts/message-contexts";
+import { PostFetch } from "../../helpers/post-fetch";
 
 export default function ChatMessage() {
   const { chatDetails, setChatDetails } = useContext(AppContext);
@@ -27,6 +31,32 @@ export default function ChatMessage() {
     "No Message Found :(\nTry Send a new Message."
   );
   const { message, sendMessage } = useWebSocket(chatDetails!.id);
+  const [isRead, setIsRead] = useState(false);
+
+  const { data: readData, handleFetch: markRead } =
+    PostFetch<messageCreateFields>({
+      url: `/chat/${chatDetails!.id}/markRead`,
+      fields: {
+        type: raw_data?.results.length ? raw_data?.results[0].type : undefined,
+        message_id: raw_data?.results.length
+          ? raw_data?.results[0].id
+          : undefined,
+      },
+    });
+
+  useEffect(() => {
+    const tmp_data: wsMessageInput = {
+      action: "mark_read",
+    };
+    if (readData) sendMessage(tmp_data);
+  }, [readData]);
+
+  useEffect(() => {
+    if (raw_data?.results.length && !isRead) {
+      markRead();
+      setIsRead(true);
+    }
+  }, [raw_data, isRead]);
 
   useEffect(() => {
     if (message && raw_data) {
@@ -49,6 +79,7 @@ export default function ChatMessage() {
           setData(newData);
           // console.log(1, newData);
           setFields({ limit: tmp_list.length });
+          setIsRead(false);
         }
       } else if (message.action == "online_status") {
         setChatDetails!({ ...chatDetails!, is_online: message.user_status });
@@ -63,6 +94,14 @@ export default function ChatMessage() {
               }
             : i
         );
+        setData({ ...raw_data, results: tmp_list });
+      } else if (message.action == "mark_read") {
+        const tmp_list: messageT[] = raw_data.results.map((i: messageT) => {
+          return {
+            ...i,
+            seen_by: [message.updated_chat.last_message!.author],
+          };
+        });
         setData({ ...raw_data, results: tmp_list });
       }
     }

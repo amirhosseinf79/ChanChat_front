@@ -110,7 +110,7 @@ export default function MsgItem({ data, prevAuthor }: prp) {
         </div>
         <div className="flex flex-row-reverse justify-between gap-4 items-center">
           <p className="text-xs mt-1">{getStrDateWithClock(data.created_at)}</p>
-          {data.seen_by.length > 0 && (
+          {data.seen_by.length > 0 && sentByMe(data.author.id) && (
             <p className="tracking-[-0.5rem] px-1">&#10004;&#10004;</p>
           )}
         </div>
