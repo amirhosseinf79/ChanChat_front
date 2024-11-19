@@ -36,7 +36,8 @@ export interface messageTypeT {
 }
 
 type wsActionT =
-  | "typing"
+  | "typing_start"
+  | "typing_end"
   | "message_create"
   | "chat_create"
   | "online_status"

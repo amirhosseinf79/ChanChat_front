@@ -5,6 +5,7 @@ interface prp {
   className?: string;
   onChange: (v: string) => unknown;
   handleEnter?: () => any;
+  handleKeyDown?: () => any;
   placeholder?: string;
   lable?: string;
   type?: string;
@@ -14,15 +15,18 @@ export default function DefaultInput({
   className,
   onChange,
   handleEnter,
+  handleKeyDown,
   value,
   placeholder,
   lable,
   type,
 }: prp) {
   function handleEnterEvent(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.key == "Enter" && handleEnter) {
+    if (e.key == "Enter" && value && handleEnter) {
       handleEnter();
       onChange("");
+    } else {
+      if (handleKeyDown) handleKeyDown();
     }
   }
 

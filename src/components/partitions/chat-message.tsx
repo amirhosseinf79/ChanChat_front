@@ -16,7 +16,7 @@ import { MessageContext } from "../contexts/message-contexts";
 import { PostFetch } from "../../helpers/post-fetch";
 
 export default function ChatMessage() {
-  const { chatDetails, setChatDetails } = useContext(AppContext);
+  const { chatDetails } = useContext(AppContext);
   const {
     handleNextPage,
     hasNext,
@@ -74,19 +74,15 @@ export default function ChatMessage() {
             ? [message.message, ...tmp_data]
             : [message.message];
           // console.log(tmp_data, tmp_list);
-          const newData = {
+          setData({
             ...raw_data,
             total: raw_data.total,
             limit: tmp_list.length,
             results: tmp_list,
-          };
-          setData(newData);
-          // console.log(1, newData);
+          });
           setFields({ limit: tmp_list.length });
           setIsRead(false);
         }
-      } else if (message.action == "online_status") {
-        setChatDetails!({ ...chatDetails!, is_online: message.user_status });
       } else if (message.action == "message_edit") {
         if (!message.message) return;
         const tmp_list = raw_data.results.map((i) =>
@@ -103,7 +99,8 @@ export default function ChatMessage() {
         if (!message.updated_chat.last_message) return;
 
         const tmp_list: messageT[] = raw_data.results.map((i: messageT) =>
-          i.id <= message.message!.id
+          i.id == message.message!.id ||
+          message.updated_chat.last_message!.seen_users.length
             ? {
                 ...i,
                 seen_by: message.updated_chat.last_message!.seen_users,

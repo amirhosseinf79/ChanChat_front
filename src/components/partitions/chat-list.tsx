@@ -1,15 +1,18 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import ChatItem from "../items/chat-item";
 import DefaultInput from "../element/text-input/input";
 import UserList from "./user-list";
 import AutoDataLoader from "../auto-loader";
 import useWebSocket from "../websocket";
 import useAppBase from "./base";
-import { chatFilterT, ChatListT, ChatT } from "../../types/chat";
+import { chatFilterT, ChatListT } from "../../types/chat";
 import { LocalWsContext } from "../contexts/local-ws-ctx";
 import ErrorBox from "../boxes/error-box";
+import { AppContext } from "../contexts/app-context";
+import { sentByMe } from "../../services/auth";
 
 export default function ChatList() {
+  const { chatDetails, setChatDetails } = useContext(AppContext);
   const { message, sendMessage, connStatus } = useWebSocket();
   const {
     fields,
@@ -51,31 +54,37 @@ export default function ChatList() {
           results: tmp_list,
         });
         setFields({ limit: tmp_list.length });
-      } else if (message.action == "online_status") {
+      } else {
+        let newData = {};
+        if (message.action == "online_status")
+          newData = { is_online: message.user_status };
+        else if (message.message && !sentByMe(message.message.id)) {
+          if (message.action == "typing_start") newData = { is_typing: true };
+          if (message.action == "typing_end") newData = { is_typing: false };
+          if (
+            message.action == "mark_read" &&
+            message.updated_chat.last_message
+          ) {
+            newData = {
+              last_message: {
+                ...message.updated_chat.last_message,
+                seen_users: message.updated_chat.last_message.seen_users,
+              },
+            };
+          }
+        }
+
         const tmp_list = raw_data.results.map((i) =>
           i.id == message.updated_chat.id
             ? {
                 ...i,
-                is_online: message.user_status,
+                ...newData,
               }
             : i
         );
         setData({ ...raw_data, results: tmp_list });
-      } else if (message.action == "mark_read") {
-        if (!message.updated_chat.last_message) return;
-
-        const tmp_list: ChatT[] = raw_data.results.map((i) =>
-          i.id == message.updated_chat.id
-            ? {
-                ...i,
-                last_message: {
-                  ...i.last_message!,
-                  seen_users: message.updated_chat.last_message!.seen_users,
-                },
-              }
-            : i
-        );
-        setData({ ...raw_data, results: tmp_list });
+        if (chatDetails && setChatDetails)
+          setChatDetails({ ...chatDetails, ...newData });
       }
     }
   }, [message]);

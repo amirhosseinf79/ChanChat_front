@@ -4,6 +4,7 @@ import { ChatT } from "../../types/chat";
 import { AppContext } from "../contexts/app-context";
 import ProfilePhoto from "../profile-photo";
 import { generateChatTitle, sentByMe } from "../../services/auth";
+import TypingStatus from "../loaders/typing";
 
 interface prp {
   data: ChatT;
@@ -25,7 +26,9 @@ export default function ChatItem({ data }: prp) {
         </div>
         <div className="flex justify-between gap-1">
           <p className="dark:text-slate-300 text-slate-800 text">
-            {data.last_message?.preview ?? "no message"}
+            <TypingStatus isTyping={data.is_typing}>
+              {data.last_message?.preview ?? <p>no message</p>}
+            </TypingStatus>
           </p>
           <div className="flex flex-col justify-end">
             {data.last_message?.seen_users &&

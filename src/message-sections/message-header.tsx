@@ -5,6 +5,7 @@ import TextBtn from "../components/element/button/text-btn";
 import { generateChatTitle } from "../services/auth";
 import { MessageContext } from "../components/contexts/message-contexts";
 import ErrorBox from "../components/boxes/error-box";
+import TypingStatus from "../components/loaders/typing";
 
 export default function MessageHeader() {
   const { chatDetails, setChatDetails } = useContext(AppContext);
@@ -26,13 +27,15 @@ export default function MessageHeader() {
               {generateChatTitle(chatDetails?.title)}
             </div>
             <div className="">
-              {chatDetails?.is_group ? (
-                <>{chatDetails.members} members</>
-              ) : chatDetails?.is_online ? (
-                <>online</>
-              ) : (
-                <>last seen recently</>
-              )}
+              <TypingStatus isTyping={chatDetails?.is_typing}>
+                {chatDetails?.is_group ? (
+                  <>{chatDetails.members} members</>
+                ) : chatDetails?.is_online ? (
+                  <>online</>
+                ) : (
+                  <>last seen recently</>
+                )}
+              </TypingStatus>
             </div>
           </div>
         </div>

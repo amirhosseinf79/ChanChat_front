@@ -9,6 +9,7 @@ export interface ChatT {
   id: number;
   is_group: boolean;
   is_joined: boolean;
+  is_typing?: boolean;
   title: titleT;
   is_online: boolean;
   members: number;

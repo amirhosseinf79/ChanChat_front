@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   MessageActionContext,
   MessageContext,
@@ -13,6 +13,7 @@ import {
   wsMessageInput,
 } from "../types/message";
 import { PostFetch } from "../helpers/post-fetch";
+import ApiService from "../services/base-api";
 
 interface previewPrp {
   author: string | any;
@@ -55,6 +56,7 @@ export default function MessageTextInput() {
   const { sendMessage } = useContext(MessageContext);
   const { chatDetails } = useContext(AppContext);
   const { fields, setFields, setReplyObj } = useContext(MessageActionContext);
+  const [isTyping, setIsTyping] = useState(false);
 
   const {
     data,
@@ -70,6 +72,26 @@ export default function MessageTextInput() {
     if (setReplyObj) setReplyObj(undefined);
     if (setFields) setFields(initMessageFields);
   }
+
+  useEffect(() => {
+    const api = new ApiService();
+    const message = { id: Number(api.getUser()) };
+    if (isTyping) {
+      const raw: wsMessageInput = {
+        action: "typing_start",
+        message,
+      };
+      sendMessage(raw);
+      const to = setTimeout(() => setIsTyping(false), 5000);
+      return () => clearTimeout(to);
+    } else {
+      const raw: wsMessageInput = {
+        action: "typing_end",
+        message,
+      };
+      sendMessage(raw);
+    }
+  }, [isTyping]);
 
   function handleSendMessage() {
     handleFetch();
@@ -100,6 +122,7 @@ export default function MessageTextInput() {
           value={fields!.text}
           placeholder="Type Message..."
           handleEnter={handleSendMessage}
+          handleKeyDown={() => setIsTyping(true)}
         />
         <DefaultBtn
           disabled={sendLoading || !(fields?.text || fields?.caption)}
