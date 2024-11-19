@@ -108,10 +108,12 @@ export default function MsgItem({ data, prevAuthor }: prp) {
         <div className="px-1 break-words" dir="auto">
           {data.type == "message" ? data.text : data.caption}
         </div>
-        <div className="flex flex-row-reverse justify-between gap-4 items-center">
+        <div className="flex flex-row-reverse justify-between gap-4 items-center text-white">
           <p className="text-xs mt-1">{getStrDateWithClock(data.created_at)}</p>
           {data.seen_by.length > 0 && sentByMe(data.author.id) && (
-            <p className="tracking-[-0.5rem] px-1">&#10004;&#10004;</p>
+            <p className="md:tracking-[-0.45rem] tracking-[-0.9rem] text-sm px-1">
+              &#10004;&#10004;
+            </p>
           )}
         </div>
       </div>
