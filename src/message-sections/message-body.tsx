@@ -32,7 +32,7 @@ export default function MessageBody() {
   );
 
   useEffect(() => {
-    setScrolled(false);
+    if (message?.action == "message_create") setScrolled(false);
   }, [message]);
 
   useEffect(() => {
