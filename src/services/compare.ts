@@ -9,4 +9,14 @@ function compareArrays(arr1: any, arr2: any) {
   return true;
 }
 
-export { compareArrays };
+function isEdited(dt1: string, dt2: string) {
+  const date1 = new Date(dt1);
+  const date2 = new Date(dt2);
+
+  console.log(dt1, dt2);
+
+  if (date1.getTime() != date2.getTime()) return true;
+  return false;
+}
+
+export { compareArrays, isEdited };

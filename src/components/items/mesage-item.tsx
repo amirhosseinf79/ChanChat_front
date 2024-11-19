@@ -5,6 +5,7 @@ import { AuthorT } from "../../types/chat";
 import { messageT, Reply } from "../../types/message";
 import ProfilePhoto from "../profile-photo";
 import { MessageActionContext } from "../contexts/message-contexts";
+import { isEdited } from "../../services/compare";
 
 function HeaderContainer({ data }: { data: messageT }) {
   const { setFields, setReplyObj } = useContext(MessageActionContext);
@@ -109,12 +110,19 @@ export default function MsgItem({ data, prevAuthor }: prp) {
           {data.type == "message" ? data.text : data.caption}
         </div>
         <div className="flex flex-row-reverse justify-between gap-4 items-center text-white">
-          <p className="text-xs mt-1">{getStrDateWithClock(data.created_at)}</p>
-          {data.seen_by.length > 0 && sentByMe(data.author.id) && (
-            <p className="md:tracking-[-0.45rem] tracking-[-0.7rem] text-sm px-1">
-              &#10004;&#10004;
+          <div className="flex gap-2 flex-row-reverse">
+            {data.seen_by.length > 0 && sentByMe(data.author.id) && (
+              <p className="md:tracking-[-0.45rem] tracking-[-0.7rem] text-sm px-1">
+                &#10004;&#10004;
+              </p>
+            )}
+            <p className="text-xs mt-1">
+              {getStrDateWithClock(data.created_at)}
             </p>
-          )}
+            {isEdited(data.created_at, data.updated_at) && (
+              <div className="text-xs mt-1">edited</div>
+            )}
+          </div>
         </div>
       </div>
     </div>
