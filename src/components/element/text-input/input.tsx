@@ -9,6 +9,7 @@ interface prp {
   placeholder?: string;
   lable?: string;
   type?: string;
+  disabled?: boolean;
 }
 
 export default function DefaultInput({
@@ -20,6 +21,7 @@ export default function DefaultInput({
   placeholder,
   lable,
   type,
+  disabled,
 }: prp) {
   function handleEnterEvent(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key == "Enter" && value && handleEnter) {
@@ -45,6 +47,7 @@ export default function DefaultInput({
         className={`px-3 py-2 dark:bg-white text-black rounded-md w-full ${className}`}
         placeholder={placeholder}
         onKeyDown={handleEnterEvent}
+        disabled={disabled}
       />
     </div>
   );

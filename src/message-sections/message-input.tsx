@@ -53,7 +53,7 @@ function ReplyEditPreviewContainer() {
 }
 
 export default function MessageTextInput() {
-  const { sendMessage } = useContext(MessageContext);
+  const { sendMessage, connStatus } = useContext(MessageContext);
   const { chatDetails } = useContext(AppContext);
   const { fields, setFields, setReplyObj } = useContext(MessageActionContext);
   const [isTyping, setIsTyping] = useState(false);
@@ -94,7 +94,7 @@ export default function MessageTextInput() {
   }, [isTyping]);
 
   function handleSendMessage() {
-    handleFetch();
+    if (connStatus == "") handleFetch();
   }
 
   useEffect(() => {
@@ -123,9 +123,14 @@ export default function MessageTextInput() {
           placeholder="Type Message..."
           handleEnter={handleSendMessage}
           handleKeyDown={() => setIsTyping(true)}
+          disabled={Boolean(connStatus)}
         />
         <DefaultBtn
-          disabled={sendLoading || !(fields?.text || fields?.caption)}
+          disabled={
+            sendLoading ||
+            !(fields?.text || fields?.caption) ||
+            Boolean(connStatus)
+          }
           loading={sendLoading}
           value="send"
           handler={handleSendMessage}
