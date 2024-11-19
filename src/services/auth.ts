@@ -1,7 +1,7 @@
 import { titleT } from "../types/chat";
 import ApiService from "./base-api";
 
-export function sentByMe(id: number) {
+export function sentByMe(id: number | undefined) {
   const api = new ApiService();
   return `${id}` == api.getUser();
 }

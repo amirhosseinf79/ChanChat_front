@@ -82,7 +82,7 @@ export default function MessageTextInput() {
         message,
       };
       sendMessage(raw);
-      const to = setTimeout(() => setIsTyping(false), 5000);
+      const to = setTimeout(() => setIsTyping(false), 1000);
       return () => clearTimeout(to);
     } else {
       const raw: wsMessageInput = {

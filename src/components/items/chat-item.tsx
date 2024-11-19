@@ -13,10 +13,14 @@ interface prp {
 export default function ChatItem({ data }: prp) {
   const { setChatDetails, chatDetails } = useContext(AppContext);
 
+  function handleSelect() {
+    setChatDetails!(chatDetails ? undefined : data);
+  }
+
   return (
     <div
       className="flex gap-2 dark:bg-indigo-800 dark:text-white text-black bg-indigo-200 p-3 cursor-pointer"
-      onClick={() => setChatDetails!(chatDetails ? undefined : data)}
+      onClick={handleSelect}
     >
       <ProfilePhoto is_online={data.is_online} size="lg" />
       <div className="flex flex-col w-full gap-1">
@@ -30,7 +34,7 @@ export default function ChatItem({ data }: prp) {
               {data.last_message?.preview ?? <p>no message</p>}
             </TypingStatus>
           </p>
-          <div className="flex flex-col justify-end">
+          <div className="flex flex-row gap-2 justify-end">
             {data.last_message?.seen_users &&
               data.last_message?.seen_users.length > 0 &&
               sentByMe(data.last_message.author.id) && (
@@ -38,6 +42,11 @@ export default function ChatItem({ data }: prp) {
                   Seen
                 </div>
               )}
+            {data.unread_messages > 0 && data.id != chatDetails?.id && (
+              <div className="bg-indigo-200 text-indigo-600 p-1 px-2 pt-0 rounded-xl">
+                {data.unread_messages}
+              </div>
+            )}
           </div>
         </div>
       </div>

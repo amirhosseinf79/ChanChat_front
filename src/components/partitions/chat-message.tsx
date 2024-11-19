@@ -7,13 +7,16 @@ import {
   messageCreateFields,
   messageFilterT,
   messageListT,
-  messageT,
   wsMessageInput,
 } from "../../types/message";
 import MessageHeader from "../../message-sections/message-header";
 import MessageBody from "../../message-sections/message-body";
 import { MessageContext } from "../contexts/message-contexts";
 import { PostFetch } from "../../helpers/post-fetch";
+import {
+  appendItemToFirst,
+  markSeenMessages,
+} from "../../services/wsProccessor";
 
 export default function ChatMessage() {
   const { chatDetails } = useContext(AppContext);
@@ -67,13 +70,7 @@ export default function ChatMessage() {
       // console.log(message);
       if (message.action == "message_create") {
         if (message.message) {
-          const tmp_data = raw_data.results.filter(
-            (i) => i.id != message.message!.id
-          );
-          const tmp_list = tmp_data
-            ? [message.message, ...tmp_data]
-            : [message.message];
-          // console.log(tmp_data, tmp_list);
+          const tmp_list = appendItemToFirst(raw_data.results, message.message);
           setData({
             ...raw_data,
             total: raw_data.total,
@@ -84,29 +81,14 @@ export default function ChatMessage() {
           setIsRead(false);
         }
       } else if (message.action == "message_edit") {
-        if (!message.message) return;
-        const tmp_list = raw_data.results.map((i) =>
-          i.id == message.message!.id
-            ? {
-                ...i,
-                text: message.message?.text,
-                caption: message.message?.caption,
-              }
-            : i
-        );
-        setData({ ...raw_data, results: tmp_list });
+        if (message.message) {
+          const tmp_list = raw_data.results.map((i) =>
+            i.id == message.message?.id ? { ...i, ...message.message } : i
+          );
+          setData({ ...raw_data, results: tmp_list });
+        }
       } else if (message.action == "mark_read") {
-        if (!message.updated_chat.last_message) return;
-
-        const tmp_list: messageT[] = raw_data.results.map((i: messageT) =>
-          i.id == message.message!.id ||
-          message.updated_chat.last_message!.seen_users.length
-            ? {
-                ...i,
-                seen_by: message.updated_chat.last_message!.seen_users,
-              }
-            : i
-        );
+        const tmp_list = markSeenMessages(raw_data.results, message);
         setData({ ...raw_data, results: tmp_list });
       }
     }

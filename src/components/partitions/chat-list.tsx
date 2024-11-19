@@ -9,7 +9,11 @@ import { chatFilterT, ChatListT } from "../../types/chat";
 import { LocalWsContext } from "../contexts/local-ws-ctx";
 import ErrorBox from "../boxes/error-box";
 import { AppContext } from "../contexts/app-context";
-import { sentByMe } from "../../services/auth";
+import {
+  appendItemToFirst,
+  updateNewChat,
+  updateChatList,
+} from "../../services/wsProccessor";
 
 export default function ChatList() {
   const { chatDetails, setChatDetails } = useContext(AppContext);
@@ -36,18 +40,25 @@ export default function ChatList() {
   }
 
   useEffect(() => {
+    if (raw_data && chatDetails) {
+      const tmp_list = raw_data.results.map((i) =>
+        i.id == chatDetails?.id ? { ...i, unread_messages: 0 } : i
+      );
+
+      setData({ ...raw_data, results: tmp_list });
+    }
+  }, [chatDetails, raw_data]);
+
+  useEffect(() => {
     if (message && raw_data) {
-      // console.log(message);
+      console.log(message);
       if (
         message.action == "chat_create" ||
         message.action == "message_create"
       ) {
-        const tmp_data = raw_data.results.filter(
-          (i) => i.id != message.updated_chat.id
-        );
-        const tmp_list = tmp_data
-          ? [message.updated_chat, ...tmp_data]
-          : [message.updated_chat];
+        const current_chat = updateNewChat(raw_data.results, message);
+        const tmp_list = appendItemToFirst(raw_data.results, current_chat);
+
         setData({
           ...raw_data,
           limit: tmp_list.length,
@@ -55,34 +66,8 @@ export default function ChatList() {
         });
         setFields({ limit: tmp_list.length });
       } else {
-        let newData = {};
-        if (message.action == "online_status")
-          newData = { is_online: message.user_status };
-        else if (message.message && !sentByMe(message.message.id)) {
-          if (message.action == "typing_start") newData = { is_typing: true };
-          if (message.action == "typing_end") newData = { is_typing: false };
-          if (
-            message.action == "mark_read" &&
-            message.updated_chat.last_message
-          ) {
-            newData = {
-              last_message: {
-                ...message.updated_chat.last_message,
-                seen_users: message.updated_chat.last_message.seen_users,
-              },
-            };
-          }
-        }
-
-        const tmp_list = raw_data.results.map((i) =>
-          i.id == message.updated_chat.id
-            ? {
-                ...i,
-                ...newData,
-              }
-            : i
-        );
-        setData({ ...raw_data, results: tmp_list });
+        const { newData, newList } = updateChatList(raw_data.results, message);
+        setData({ ...raw_data, results: newList });
         if (chatDetails && setChatDetails)
           setChatDetails({ ...chatDetails, ...newData });
       }
