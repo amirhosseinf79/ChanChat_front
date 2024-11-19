@@ -16,6 +16,7 @@ interface ctxT {
   messageList?: messageListT;
   messageError?: errorType;
   message?: wsMessage;
+  connStatus?: string;
 }
 
 export const MessageContext = createContext<ctxT>({

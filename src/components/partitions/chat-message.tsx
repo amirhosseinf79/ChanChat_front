@@ -30,7 +30,7 @@ export default function ChatMessage() {
     `/chat/${chatDetails!.id}/getMessages`,
     "No Message Found :(\nTry Send a new Message."
   );
-  const { message, sendMessage } = useWebSocket(chatDetails!.id);
+  const { message, sendMessage, connStatus } = useWebSocket(chatDetails!.id);
   const [isRead, setIsRead] = useState(false);
 
   const { data: readData, handleFetch: markRead } =
@@ -125,6 +125,7 @@ export default function ChatMessage() {
         hasNext,
         loading,
         message,
+        connStatus,
       }}
     >
       <div className="flex flex-col h-full dark:bg-indigo-950 bg-indigo-200 relative">
