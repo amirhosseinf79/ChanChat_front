@@ -41,7 +41,7 @@ function HeaderContainer({ data }: { data: messageT }) {
 
   return (
     <div
-      className={`flex gap-2 ${headerJustify} break-words text-xs text-indigo-100`}
+      className={`flex gap-2 ${headerJustify} break-words overflow-hidden text-xs text-indigo-100`}
     >
       <button onClick={addReply}>Reply</button>
       {userInfo || <button onClick={editMsg}>Edit</button>}
@@ -92,7 +92,7 @@ export default function MsgItem({ data, prevAuthor }: prp) {
 
   return (
     <div
-      className={`flex items-end gap-1 ${
+      className={`flex items-end gap-1 overflow-hidden ${
         sentByMe(data.author.id) ? "flex-row-reverse" : ""
       }`}
     >
